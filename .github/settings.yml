@@ -3,6 +3,13 @@
 repository:
   # See https://docs.github.com/en/rest/reference/repos#update-a-repository for all available settings.
 
+  name: github-migration
+
+  description: Migration bitbucket repository to github
+
+  # A comma-separated list of topics to set on the repository
+  topics: nodejs
+
   # Either `true` to make the repository private, or `false` to make it public.
   private: false
 
