@@ -4,8 +4,8 @@ const exec = util.promisify(require('child_process').exec);
 const assert = require('assert');
 
 const argv = require('yargs/yargs')(process.argv.slice(2))
-  .usage('Usage: $0 -ght [string] -bbt [string] -repo [string] -owner [string]')
-  .demandOption(['ghk', 'h'])
+  .usage('Usage: $0 --ght [string] --bbt [string] --repo [string] --owner [string]')
+  .demandOption(['ght', 'bbt', 'repo', 'owner'])
   .argv;
 
 const COMPLETE_STATUS = 'complete';
@@ -24,7 +24,7 @@ async function execAndPrint(command) {
 
 (async () => {
   const octokit = new Octokit({
-    auth: argv.ghk
+    auth: argv.ght
   })
 
   const createRepoResponse = await octokit.request('POST /orgs/AI21Labs/repos', {
