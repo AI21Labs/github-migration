@@ -32,9 +32,6 @@ async function execAndPrint(command) {
     name: argv.repo,
     homepage: 'https://github.com',
     'private': true,
-    has_issues: true,
-    has_projects: true,
-    has_wiki: true
   });
 
   assert([200, 201].includes(createRepoResponse.status));
@@ -61,10 +58,31 @@ async function execAndPrint(command) {
   await execAndPrint(`git clone git@github.com:AI21Labs/${argv.repo}.git`);
   await execAndPrint(`\
     cd ${argv.repo} && \
-    mkdir .github && \
-    cp ../settings.yml .github && \
+    mkdir -p .github/workflows
+  `);
+
+  await execAndPrint(`\
+    cp settings.yml .github && \
     git add -A && \
-    git commit -m "settings.yaml" && \
-    git push -u origin master\
+    git commit -m "ci(settings): manage repo by code" && \
+    git push -u origin master
+    `);
+  await execAndPrint(`\
+    cp .github/CODEOWNERS .github && \
+    git add -A && \
+    git commit -m "ci(codeowners): manage auto assignments of PRs" && \
+    git push -u origin master
+    `);
+  await execAndPrint(`\
+    cp .pre-commit-config.yaml . && \
+    git add -A && \
+    git commit -m "ci(pre-commit): basic checks" && \
+    git push -u origin master
+    `);
+  await execAndPrint(`\
+    cp .github/workflows/quality-checks.yml . && \
+    git add -A && \
+    git commit -m "ci(workflows): quality checks" && \
+    git push -u origin master
     `);
 })();

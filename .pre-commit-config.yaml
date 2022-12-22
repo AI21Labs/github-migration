@@ -16,7 +16,6 @@ repos:
       - id: check-merge-conflict
       - id: check-symlinks
       - id: detect-private-key
-        exclude: .gitleaks.toml
       - id: no-commit-to-branch
       - id: trailing-whitespace
       - id: end-of-file-fixer
