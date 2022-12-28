@@ -4,13 +4,13 @@ repository:
   # See https://docs.github.com/en/rest/reference/repos#update-a-repository for all available settings.
 
   # The name of the repository. Changing this will rename the repository.
-  name: github-migration
+  # name:
 
   # A short description of the repository that will show up on GitHub.
-  description: Migration bitbucket repository to github
+  # description:
 
   # A comma-separated list of topics to set on the repository
-  topics: nodejs
+  # topics:
 
   # Either `true` to make the repository private, or `false` to make it public.
   private: true
@@ -87,22 +87,22 @@ labels:
 
 
 # Collaborators: give specific users access to this repository.
-# See https://developer.github.com/v3/repos/collaborators/#add-user-as-a-collaborator for available options
-# collaborators:
-#   - username: my-user
-#     # Note: `permission` is only valid on organization-owned repositories.
-#     # The permission to grant the collaborator. Can be one of:
-#     # * `pull` - can pull, but not push to or administer this repository.
-#     # * `push` - can pull and push, but not administer this repository.
-#     # * `admin` - can pull, push and administer this repository.
-#     # * `maintain` - Recommended for project managers who need to manage the repository without access to sensitive or destructive actions.
-#     # * `triage` - Recommended for contributors who need to proactively manage issues and pull requests without write access.
-#     permission: admin
+# See https://docs.github.com/en/rest/reference/repos#add-a-repository-collaborator for available options
 collaborators:
-# - username:
-# permission: admin
+# - username: bkeepers
+#   permission: push
+# - username: hubot
+#   permission: pull
 
-# See https://developer.github.com/v3/teams/#add-or-update-team-repository for available options
+# Note: `permission` is only valid on organization-owned repositories.
+# The permission to grant the collaborator. Can be one of:
+# * `pull` - can pull, but not push to or administer this repository.
+# * `push` - can pull and push, but not administer this repository.
+# * `admin` - can pull, push and administer this repository.
+# * `maintain` - Recommended for project managers who need to manage the repository without access to sensitive or destructive actions.
+# * `triage` - Recommended for contributors who need to proactively manage issues and pull requests without write access.
+
+# See https://docs.github.com/en/rest/reference/teams#add-or-update-team-repository-permissions for available options
 teams:
 # The permission to grant the team. Can be one of:
 # * `pull` - can pull, but not push to or administer this repository.
@@ -137,8 +137,7 @@ branches:
         # Required. Require branches to be up to date before merging.
         strict: true
         # Required. The list of status checks to require in order to merge into this branch
-        contexts:
-          - quality-checks
+        contexts: []
       required_signatures: false
       # Required. Enforce all configured restrictions for administrators. Set to true to enforce required status checks for repository administrators. Set to null to disable.
       enforce_admins: false

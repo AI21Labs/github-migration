@@ -53,11 +53,13 @@ After running the command above open `.env` and verify that the configuration ma
 - Run migration script
 
 ```bash
-npm run migrate
+REPO=<REPOSITORY_NAME> npm run migrate
 ```
 
 - Update Cloudbuild with the new github repository
-- Verify CI/CD works
+  - [connect repository](https://console.cloud.google.com/cloud-build/triggers;region=global?project=publishing-337912)
+  - replace `cloudBuild.yml` trigger
+- Verify CI/CD for your module works
 - Delete your repository from bitbucket once it becomes obsolete
 
 ## Contribute

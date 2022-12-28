@@ -2,6 +2,7 @@ const { Octokit, App } = require("@octokit/core");
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const assert = require('assert');
+const fs = require('fs')
 
 const argv = require('yargs/yargs')(process.argv.slice(2))
   .usage('Usage: $0 --ght [string] --bbt [string] --repo [string] --owner [string]')
@@ -73,12 +74,14 @@ async function execAndPrint(command) {
     git commit -m "ci(codeowners): manage auto assignments of PRs" && \
     git push -u origin master
     `);
-  await execAndPrint(`\
-    cp .pre-commit-config.yaml . && \
-    git add -A && \
-    git commit -m "ci(pre-commit): basic checks" && \
-    git push -u origin master
-    `);
+  if (!fs.existsSync(".pre-commit-config.yaml")) {
+    await execAndPrint(`\
+      cp .pre-commit-config.yaml . && \
+      git add -A && \
+      git commit -m "ci(pre-commit): basic checks" && \
+      git push -u origin master
+      `);
+  }
   await execAndPrint(`\
     cp .github/workflows/quality-checks.yml . && \
     git add -A && \
