@@ -4,7 +4,7 @@ repository:
   # See https://docs.github.com/en/rest/reference/repos#update-a-repository for all available settings.
 
   # The name of the repository. Changing this will rename the repository.
-  # name:
+  name: github-migration
 
   # A short description of the repository that will show up on GitHub.
   # description:
@@ -74,9 +74,6 @@ labels:
     color: '#faf064'
     description: Work in progress
 
-  - name: draft
-    # If including a `#`, make sure to wrap it with quotes!
-    color: '#c800c8'
 
 # Milestones: define milestones for Issues and Pull Requests
 # milestones:

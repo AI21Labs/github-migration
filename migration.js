@@ -2,7 +2,7 @@ const { Octokit, App } = require("@octokit/core");
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const assert = require('assert');
-const fs = require('fs')
+const {readFile, writeFile, promises: fsPromises} = require('fs');
 
 const argv = require('yargs/yargs')(process.argv.slice(2))
   .usage('Usage: $0 --ght [string] --bbt [string] --repo [string] --owner [string]')
@@ -62,28 +62,39 @@ async function execAndPrint(command) {
     mkdir -p .github/workflows
   `);
 
+  readFile('.././github/settings.yml', 'utf-8', function (err, contents) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    const replaced = contents.replace(/name: github-migration/g, `name: ${argv.repo}`);
+    writeFile('./github/settings.yml', replaced, 'utf-8', function (err) {
+      console.log(err);
+    });
+  });
+
+
   await execAndPrint(`\
-    cp settings.yml .github && \
     git add -A && \
     git commit -m "ci(settings): manage repo by code" && \
     git push -u origin master
     `);
   await execAndPrint(`\
-    cp .github/CODEOWNERS .github && \
+    cp ../github/CODEOWNERS .github && \
     git add -A && \
     git commit -m "ci(codeowners): manage auto assignments of PRs" && \
     git push -u origin master
     `);
   if (!fs.existsSync(".pre-commit-config.yaml")) {
     await execAndPrint(`\
-      cp .pre-commit-config.yaml . && \
+      cp ../.pre-commit-config.yaml . && \
       git add -A && \
       git commit -m "ci(pre-commit): basic checks" && \
       git push -u origin master
       `);
   }
   await execAndPrint(`\
-    cp .github/workflows/quality-checks.yml . && \
+    cp ../.github/workflows/quality-checks.yml .github/workflows && \
     git add -A && \
     git commit -m "ci(workflows): quality checks" && \
     git push -u origin master
