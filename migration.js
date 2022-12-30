@@ -2,7 +2,7 @@ const { Octokit, App } = require("@octokit/core");
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const assert = require('assert');
-const {readFile, writeFile, promises: fsPromises} = require('fs');
+const {existsSync, readFile, writeFile, promises: fsPromises} = require('fs');
 
 const argv = require('yargs/yargs')(process.argv.slice(2))
   .usage('Usage: $0 --ght [string] --bbt [string] --repo [string] --owner [string]')
@@ -58,6 +58,8 @@ async function execAndPrint(command) {
 
   await execAndPrint(`git clone git@github.com:AI21Labs/${argv.repo}.git`);
   await execAndPrint(`mkdir -p ${argv.repo}/.github/workflows`);
+  await execAndPrint(`cp .github/CODEOWNERS ${argv.repo}/.github`);
+  await execAndPrint(`cp .github/workflows/quality-checks.yml ${argv.repo}/.github/workflows`);
 
   readFile('.github/settings.yml', 'utf-8', function (err, contents) {
     if (err) {
@@ -70,31 +72,17 @@ async function execAndPrint(command) {
     });
   });
 
-  await execAndPrint(`cd ${argv.repo}`);
-  await execAndPrint(`\
-    git add -A && \
-    git commit -m "ci(settings): manage repo by code" && \
-    git push -u origin master
-  `);
-  await execAndPrint(`\
-    cp ../github/CODEOWNERS .github && \
-    git add -A && \
-    git commit -m "ci(codeowners): manage auto assignments of PRs" && \
-    git push -u origin master
-  `);
-  if (!fs.existsSync(".pre-commit-config.yaml")) {
-    await execAndPrint(`\
-      cp ../.pre-commit-config.yaml . && \
-      git add -A && \
-      git commit -m "ci(pre-commit): basic checks" && \
-      git push -u origin master
-    `);
+  if (!existsSync(`${argv.repo}/.pre-commit-config.yaml`)) {
+    await execAndPrint(`cp .pre-commit-config.yaml ${argv.repo}`);
   }
+
   await execAndPrint(`\
-    cp ../.github/workflows/quality-checks.yml .github/workflows && \
-    git add -A && \
-    git commit -m "ci(workflows): quality checks" && \
+    cd ${argv.repo} && \
+    git add -A
+    git commit -m \"ci: migrating from bitbucket\" && \
     git push -u origin master
-  `);
-  await execAndPrint(`cd - && rm -rf ${argv.repo}`);
+    `
+  );
+
+  await execAndPrint(`cd .. && rm -rf ${argv.repo}`);
 })();
