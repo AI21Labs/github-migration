@@ -62,13 +62,13 @@ async function execAndPrint(command) {
     mkdir -p .github/workflows
   `);
 
-  readFile('.././github/settings.yml', 'utf-8', function (err, contents) {
+  readFile('../.github/settings.yml', 'utf-8', function (err, contents) {
     if (err) {
       console.log(err);
       return;
     }
     const replaced = contents.replace(/name: github-migration/g, `name: ${argv.repo}`);
-    writeFile('./github/settings.yml', replaced, 'utf-8', function (err) {
+    writeFile('.github/settings.yml', replaced, 'utf-8', function (err) {
       console.log(err);
     });
   });
