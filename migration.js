@@ -73,30 +73,29 @@ async function execAndPrint(command) {
     });
   });
 
-
   await execAndPrint(`\
     git add -A && \
     git commit -m "ci(settings): manage repo by code" && \
     git push -u origin master
-    `);
+  `);
   await execAndPrint(`\
     cp ../github/CODEOWNERS .github && \
     git add -A && \
     git commit -m "ci(codeowners): manage auto assignments of PRs" && \
     git push -u origin master
-    `);
+  `);
   if (!fs.existsSync(".pre-commit-config.yaml")) {
     await execAndPrint(`\
       cp ../.pre-commit-config.yaml . && \
       git add -A && \
       git commit -m "ci(pre-commit): basic checks" && \
       git push -u origin master
-      `);
+    `);
   }
   await execAndPrint(`\
     cp ../.github/workflows/quality-checks.yml .github/workflows && \
     git add -A && \
     git commit -m "ci(workflows): quality checks" && \
     git push -u origin master
-    `);
+  `);
 })();
