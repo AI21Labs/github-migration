@@ -36,25 +36,24 @@ source ./init.sh
   - GitHub and BitBucket tokens
   - Repository to migrate
 
-### Init Configuration
-
-The script configuration is saved in a `.env` file in the root directory. To avoid configuration commits `.env` itself is not source controlled.
-
-- To Init configuration run
-
-```shell
-npm run init-config
-```
-
-After running the command above open `.env` and verify that the configuration matches your local environment.
-
 ## Migrate a Bitbucket Repository
 
 - Run migration script
 
 ```bash
-REPO=<REPOSITORY_NAME> npm run migrate
+$ node migration.js --help
+Usage: migration.js --ght [string] --bbt [string] --repo [string] --owner [string]
+
+Options:
+  --help     Show help                              [boolean]
+  --version  Show version number                    [boolean]
+  --ght      Github Personal Access Token (PAT)     [required]--bbt      BitBucket Personal Access Token (PAT)  [required]--repo     Repository to migrate                  [required]--owner    Github username                        [required]
 ```
+  - For example:
+
+  ```bash
+  node migration.js --bbt BB_TOKEN --ght GH_TOKEN --owner USER --repo REPO_NAME
+  ```
 
 - Update Cloudbuild with the new github repository
   - [connect repository](https://console.cloud.google.com/cloud-build/triggers;region=global?project=publishing-337912)
