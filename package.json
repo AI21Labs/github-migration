@@ -1,6 +1,23 @@
 {
+  "name": "@ai21/github-migration",
+  "version": "1.0.0",
+  "description": "Migrate bitbucket repositories to github",
+  "author": "AI21",
+  "private": "true",
+  "license": "UNLICENSED",
+  "main": "migration.js",
+  "engines": {
+    "npm": ">=8.1.0",
+    "node": ">=16.13.0"
+  },
+  "scripts": {
+    "migrate": "dotenv cross-var node migration.js --bbt %BITBUCKET_TOKEN% --ght %GITHUB_TOKEN% --owner %OWNER% --repo %REPO%",
+    "init-config": "cp .env-template .env"
+  },
   "dependencies": {
     "@octokit/core": "^4.1.0",
-    "yargs": "^17.6.2"
+    "yargs": "^17.6.2",
+    "cross-var": "1.1.0",
+    "dotenv-cli": "3.0.0"
   }
 }

@@ -2,6 +2,7 @@ const { Octokit, App } = require("@octokit/core");
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const assert = require('assert');
+const {existsSync, readFile, writeFile, promises: fsPromises} = require('fs');
 
 const argv = require('yargs/yargs')(process.argv.slice(2))
   .usage('Usage: $0 --ght [string] --bbt [string] --repo [string] --owner [string]')
@@ -32,9 +33,6 @@ async function execAndPrint(command) {
     name: argv.repo,
     homepage: 'https://github.com',
     'private': true,
-    has_issues: true,
-    has_projects: true,
-    has_wiki: true
   });
 
   assert([200, 201].includes(createRepoResponse.status));
@@ -59,12 +57,32 @@ async function execAndPrint(command) {
   }
 
   await execAndPrint(`git clone git@github.com:AI21Labs/${argv.repo}.git`);
+  await execAndPrint(`mkdir -p ${argv.repo}/.github/workflows`);
+  await execAndPrint(`cp .github/CODEOWNERS ${argv.repo}/.github`);
+  await execAndPrint(`cp .github/workflows/quality-checks.yml ${argv.repo}/.github/workflows`);
+
+  readFile('.github/settings.yml', 'utf-8', function (err, contents) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    const replaced = contents.replace(/name: github-migration/g, `name: ${argv.repo}`);
+    writeFile(`${argv.repo}/.github/settings.yml`, replaced, 'utf-8', function (err) {
+      console.log(err);
+    });
+  });
+
+  if (!existsSync(`${argv.repo}/.pre-commit-config.yaml`)) {
+    await execAndPrint(`cp .pre-commit-config.yaml ${argv.repo}`);
+  }
+
   await execAndPrint(`\
     cd ${argv.repo} && \
-    mkdir .github && \
-    cp ../settings.yml .github && \
-    git add -A && \
-    git commit -m "settings.yaml" && \
-    git push -u origin master\
-    `);
+    git add -A
+    git commit -m \"ci: migrating from bitbucket\" && \
+    git push -u origin master
+    `
+  );
+
+  await execAndPrint(`cd .. && rm -rf ${argv.repo}`);
 })();
