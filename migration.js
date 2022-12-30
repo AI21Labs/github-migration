@@ -57,22 +57,20 @@ async function execAndPrint(command) {
   }
 
   await execAndPrint(`git clone git@github.com:AI21Labs/${argv.repo}.git`);
-  await execAndPrint(`\
-    cd ${argv.repo} && \
-    mkdir -p .github/workflows
-  `);
+  await execAndPrint(`mkdir -p ${argv.repo}/.github/workflows`);
 
-  readFile('../.github/settings.yml', 'utf-8', function (err, contents) {
+  readFile('.github/settings.yml', 'utf-8', function (err, contents) {
     if (err) {
       console.log(err);
       return;
     }
     const replaced = contents.replace(/name: github-migration/g, `name: ${argv.repo}`);
-    writeFile('.github/settings.yml', replaced, 'utf-8', function (err) {
+    writeFile(`${argv.repo}/.github/settings.yml`, replaced, 'utf-8', function (err) {
       console.log(err);
     });
   });
 
+  await execAndPrint(`cd ${argv.repo}`);
   await execAndPrint(`\
     git add -A && \
     git commit -m "ci(settings): manage repo by code" && \
@@ -98,4 +96,5 @@ async function execAndPrint(command) {
     git commit -m "ci(workflows): quality checks" && \
     git push -u origin master
   `);
+  await execAndPrint(`cd - && rm -rf ${argv.repo}`);
 })();
