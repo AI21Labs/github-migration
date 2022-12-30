@@ -47,7 +47,10 @@ Usage: migration.js --ght [string] --bbt [string] --repo [string] --owner [strin
 Options:
   --help     Show help                              [boolean]
   --version  Show version number                    [boolean]
-  --ght      Github Personal Access Token (PAT)     [required]--bbt      BitBucket Personal Access Token (PAT)  [required]--repo     Repository to migrate                  [required]--owner    Github username                        [required]
+  --ght      Github Personal Access Token (PAT)     [require]
+  --bbt      BitBucket Personal Access Token (PAT)  [required]
+  --repo     Repository to migrate                  [required]
+  --owner    Github username                        [required]
 ```
   - For example:
 
