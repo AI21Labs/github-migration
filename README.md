@@ -59,7 +59,7 @@ Options:
   ```
 
 - Update Cloudbuild with the new github repository
-  - [connect repository](https://console.cloud.google.com/cloud-build/triggers;region=global?project=publishing-337912)
+  - [connect repository](https://console.cloud.google.com/cloud-build/triggers;region=global?project=publishing-337912) as shown [here](./resources/update-trigger.mov)
   - replace `cloudBuild.yml` trigger
 - Verify CI/CD for your module works
 - Delete your repository from bitbucket once it becomes obsolete

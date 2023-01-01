@@ -9,7 +9,7 @@ repos:
     rev: v4.3.0
     hooks:
       - id: check-added-large-files
-        exclude: package-lock.json
+        exclude: resources/update-trigger.mov
       - id: check-case-conflict
       - id: check-executables-have-shebangs
       - id: check-shebang-scripts-are-executable
