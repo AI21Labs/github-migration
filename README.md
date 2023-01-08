@@ -58,6 +58,7 @@ Options:
   node migration.js --bbt BB_TOKEN --ght GH_TOKEN --owner USER --repo REPO_NAME
   ```
 
+- Update repository *source control* property in [infra-teraform](https://bitbucket.org/ai21labs/infra-terraform/src/master/)
 - Update Cloudbuild with the new github repository
   - [connect repository](https://console.cloud.google.com/cloud-build/triggers;region=global?project=publishing-337912)
   - replace `cloudBuild.yml` trigger

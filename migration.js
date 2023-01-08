@@ -72,6 +72,18 @@ async function execAndPrint(command) {
     });
   });
 
+  if (existsSync(`${argv.repo}/cloudbuild.yaml`))
+  readFile('cloudbuild.yaml', 'utf-8', function (err, contents) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    const replaced = contents.replace(/env: 'BITBUCKET_SSH_KEY'/g, `env: 'GH_SSH_KEY'`);
+    writeFile(`${argv.repo}/cloudbuild.yaml`, replaced, 'utf-8', function (err) {
+      console.log(err);
+    });
+  });
+
   if (!existsSync(`${argv.repo}/.pre-commit-config.yaml`)) {
     await execAndPrint(`cp .pre-commit-config.yaml ${argv.repo}`);
   }
